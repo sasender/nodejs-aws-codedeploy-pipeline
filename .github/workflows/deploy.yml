@@ -1,7 +1,11 @@
 name: CI/CD Pipeline
 on:
-  push:
-    branches: [ main ]
+   workflow_dispatch:
+    inputs:
+      tagid:
+        description: 'Tag ID'     
+        required: true
+
 jobs:       
   deploy:
     runs-on: ubuntu-latest
