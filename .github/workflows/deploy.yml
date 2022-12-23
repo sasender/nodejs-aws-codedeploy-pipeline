@@ -24,22 +24,21 @@ jobs:
       
       #step 3
 #       # Deploy push to AWS S3
-#     - name: AWS Deploy push
-#       run: |
-#           aws deploy push \
-#           --application-name ${{ matrix.appname }} \
-#           --description "This is a revision for the ${{ matrix.appname }}-${{ github.sha }}" \
-#           --ignore-hidden-files \
-#           --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
-          
-#           --source .
-
-      # Step 4
-    - name: Create CodeDeploy Deployment
-      id: deploy
+    - name: AWS Deploy push
       run: |
-        aws deploy create-deployment \
-        --application-name nodejs-express-php \
-        --deployment-group-name nodejs-expres-php \
-        --deployment-config-name CodeDeployDefault.OneAtATime \
-        --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
+         sudo apt-get -y update; sudo apt-get -y install git curl jq python3-pip; sudo apt-get -y install wget zip unzip
+         sudo pip3 install -U awscli
+         sudo curl -fsSL https://get.docker.com -o get-docker.sh
+         git clone git@github.com:sasender/nodejs-aws-codedeploy-pipeline.git -b ${{github.event.inputs.tagid}}
+         zip -r $GITHUB_SHA.zip nodejs-aws-codedeploy-pipeline
+         ls -la
+         pwd
+         aws sts get-caller-identity
+         aws s3 ls s3://sasender --recursive
+         aws s3 cp $GITHUB_SHA.zip s3://sasender/
+         aws deploy create-deployment \
+         --application-name deploy-jhon \
+         --deployment-group-name deploy-jhon \
+         --deployment-config-name CodeDeployDefault.OneAtATime \
+         --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
+         --s3-location bucket=sasender,key=$GITHUB_SHA.zip,bundleType=zip
