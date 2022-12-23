@@ -29,7 +29,7 @@ jobs:
          sudo apt-get -y update; sudo apt-get -y install git curl jq python3-pip; sudo apt-get -y install wget zip unzip
          sudo pip3 install -U awscli
          sudo curl -fsSL https://get.docker.com -o get-docker.sh
-         git clone git@github.com:sasender/nodejs-aws-codedeploy-pipeline.git -b ${{github.event.inputs.tagid}}
+         git clone https://github.com/sasender/nodejs-aws-codedeploy-pipeline.git -b ${{github.event.inputs.tagid}}
          zip -r $GITHUB_SHA.zip nodejs-aws-codedeploy-pipeline
          ls -la
          pwd
